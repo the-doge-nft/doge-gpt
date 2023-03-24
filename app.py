@@ -16,8 +16,15 @@ def hello_world():
         prompt=get_prompt(),
         temperature=0.6,
     )
+    text = response["choices"][0]["text"]
     print(response)
-    return response.choices[0].text
+    return {"response": response, "text": text, "prompt": get_prompt()}
+
+
+@app.route('/list-models')
+def list_models():
+    response = openai.Engine.list()
+    return response
 
 
 def get_prompt():
