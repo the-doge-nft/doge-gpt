@@ -2,23 +2,29 @@
 import os
 
 import openai
-from flask import Flask
+from flask import Flask, request
+from flask_cors import CORS
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
+CORS(app)
 
 
-@app.route('/', methods=('GET', 'POST'))
+@app.route('/prompt', methods=["POST"])
 def hello_world():
+    prompt = request.json.get("prompt")
+    generated_prompt = get_doge_prompt(prompt)
+
     response = openai.Completion.create(
         model="text-davinci-003",
-        prompt=get_prompt(),
+        prompt=generated_prompt,
         temperature=0.6,
+        max_tokens=2048,
     )
     text = response["choices"][0]["text"]
     print(response)
-    return {"response": response, "text": text, "prompt": get_prompt()}
+    return {"data": text}
 
 
 @app.route('/list-models')
@@ -27,5 +33,5 @@ def list_models():
     return response
 
 
-def get_prompt():
-    return "what is my name in the style of doge"
+def get_doge_prompt(prompt):
+    return f"{prompt} in the style of doge"
