@@ -11,6 +11,10 @@ app = Flask(__name__)
 CORS(app, support_credentials=True)
 
 
+@app.route('/health', methods=["GET"])
+def get_health():
+    return {"status": "bork"}
+
 @app.route('/prompt', methods=["POST"])
 def hello_world():
     prompt = request.json.get("prompt")
