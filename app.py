@@ -8,7 +8,7 @@ from flask_cors import CORS
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, support_credentials=True)
 
 
 @app.route('/prompt', methods=["POST"])
@@ -23,7 +23,6 @@ def hello_world():
         max_tokens=2048,
     )
     text = response["choices"][0]["text"]
-    print(response)
     return {"data": text}
 
 
@@ -34,4 +33,4 @@ def list_models():
 
 
 def get_doge_prompt(prompt):
-    return f"{prompt} in the style of doge"
+    return f"{prompt} in the style of doge using words such as wow, such, much, very, and amaze"
